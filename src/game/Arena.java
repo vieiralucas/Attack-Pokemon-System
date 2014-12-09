@@ -8,8 +8,10 @@ public class Arena {
 	protected Espaco[] espacosRemotos = new Espaco[6];
 	protected boolean conectado;
 	protected boolean emAndamento;
+	protected Baralho baralho;
 	
 	public Arena() {
+		baralho = new Baralho();
 		init();
 	}
 
@@ -77,5 +79,22 @@ public class Arena {
 			return null;
 		}
 		return espacosRemotos[i].getPokemon().getImage();
+	}
+
+	public void invocaPokemonRemoto(int posInvocamento, int indicePokemonInvocado) {
+		Pokemon invocado = baralho.find(indicePokemonInvocado);
+		espacosRemotos[posInvocamento].setPokemon(invocado);
+	}
+
+	public int batalhaRemota(int posPokemonAtacado, int posPokemonAtacou) {
+		Pokemon atacado = espacosLocal[posPokemonAtacado].getPokemon();
+		Pokemon atacou = espacosRemotos[posPokemonAtacou].getPokemon();
+		if (atacou.atacar(atacado)) {
+			espacosRemotos[posPokemonAtacado].setPokemon(null);
+			return atacado.getVida();
+		} else {
+			espacosLocal[posPokemonAtacou].setPokemon(null);
+			return -atacou.getVida();
+		}
 	}
 }

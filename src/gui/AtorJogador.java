@@ -41,7 +41,7 @@ public class AtorJogador {
 		return gui;
 	}
 
-	public int iniciarPartida() {
+	public void iniciarPartida() {
 		boolean interromper = false;
 		boolean conectado = false;
 		boolean emAndamento = arena.isEmAndamento();
@@ -52,12 +52,10 @@ public class AtorJogador {
 		}
 		if (interromper || ((!emAndamento) && conectado)) {
 			netGames.iniciarPartida();
-			return 6;
 		}
 		if (!conectado) {
-			return 7;
+			gui.showMessage("Você não está conectado.");
 		}
-		return 13;
 	}
 
 	public void receberNovaPartida(int posicao) {
@@ -83,19 +81,19 @@ public class AtorJogador {
 		arena.setEmAndamento(true);
 	}
 	
-	public int conectar() {
+	public void conectar() {
 		boolean conectado = arena.isConectado();
 		if (!conectado) {
 			String servidor = obterDadosConexao();
 			boolean exito = netGames.conectar(nome, servidor);
 			if (exito) {
 				arena.setConectado(true);
-				return 0;
+				gui.showMessage("Conexão efetuada com sucesso!");
 			} else {
-				return 2;
+				gui.showMessage("Falha ao conectar-se!");
 			}
 		} else {
-			return 1;
+			gui.showMessage("Você já está conectado!");
 		}
 	}
 
@@ -105,32 +103,28 @@ public class AtorJogador {
 		return servidor;
 	}
 
-	public int desconectar() {
+	public void desconectar() {
 		boolean conectado = arena.isConectado();
 		if (conectado) {
 			boolean exito = netGames.desconectar();
 			if (exito) {
 				arena.setConectado(false);
-				return 3;
+				gui.showMessage("Desconexão efetuada com sucesso.");
 			} else {
-				return 5;
+				gui.showMessage("Falha ao desconectar-se.");
 			}
 		} else {
-			return 4;
+			gui.showMessage("Você não está conectado.");
 		}
 	}
 
 	public void receberJogada(Jogada lance) {
 		JogadaPokemon jogada = (JogadaPokemon) lance;
-		if (jogada.getAcao() == 0) {
-			arena.getEspacosRemotos()[jogada.getIndiceInvocamento()].setPokemon(baralho.find(jogada.getIndicePokemonInvocado()));
+		if (jogada.getAcao() == JogadaPokemon.INVOCAMENTO) {
+			arena.invocaPokemonRemoto(jogada.getPosInvocamento(), jogada.getIndicePokemonInvocado());
 		}
-		if (jogada.getAcao() == 1) {
-			if (arena.getEspacosRemotos()[jogada.getIndicePokemonAtacou()].getPokemon().atacar(arena.getEspacosLocal()[jogada.getIndicePokemonAtacado()].getPokemon())) {
-				arena.getEspacosLocal()[jogada.getIndicePokemonAtacado()].setPokemon(null);
-			} else {
-				arena.getEspacosRemotos()[jogada.getIndicePokemonAtacou()].setPokemon(null);
-			}
+		if (jogada.getAcao() == JogadaPokemon.ATAQUE) {
+			arena.batalhaRemota(jogada.getPosPokemonAtacado(), jogada.getPosPokemonAtacou());
 		}
 		energiaAdv = jogada.getEnergiaAdversario();
 		vida = jogada.getVidaLocal();
@@ -159,10 +153,10 @@ public class AtorJogador {
 			if (energia - mao[i].getCusto() >= 0) {
 				int confirm = JOptionPane.showConfirmDialog(gui, "Tem certeza que deseja invocar " + mao[i].getNome() + "?");
 				if (confirm == JOptionPane.YES_OPTION) {
-					int indiceInvocamento = arena.invocaPokemonLocal(mao[i]); 
-					if (indiceInvocamento != -1) {
+					int posInvocamento = arena.invocaPokemonLocal(mao[i]); 
+					if (posInvocamento != -1) {
 						energia -= mao[i].getCusto();
-						enviaInvocamento(indiceInvocamento, mao[i].getIndice(), "O adversário invocou um " + mao[i].getNome());
+						enviaInvocamento(posInvocamento, mao[i].getIndice(), "O adversário invocou um " + mao[i].getNome());
 						mao[i] = null;
 						gui.update();
 					}
@@ -175,8 +169,9 @@ public class AtorJogador {
 		}
 	}
 
-	public void enviaInvocamento(int indiceInvocamento, int indicePokemonInvocado, String msg) {
-		JogadaPokemon jPokemon = new JogadaPokemon(indiceInvocamento, indicePokemonInvocado, 0, 0, 0, 0, energia, vidaAdv, vida, msg, 0);
+	public void enviaInvocamento(int posInvocamento, int indicePokemonInvocado, String msg) {
+		JogadaPokemon jPokemon = new JogadaPokemon(energia, vidaAdv, vida, msg);
+		jPokemon.configuraInvocamento(posInvocamento, indicePokemonInvocado);
 		netGames.enviarJogada(jPokemon);
 	}
 
@@ -208,8 +203,9 @@ public class AtorJogador {
 		}
 	}
 	
-	public void enviaEvolucao(int espacoPokemonEvoluido, int indicePokemonEvoluido, String msg) {
-		JogadaPokemon jPokemon = new JogadaPokemon(0, 0, 0, 0, espacoPokemonEvoluido, indicePokemonEvoluido, energia, vidaAdv, vida, msg, 2);
+	public void enviaEvolucao(int posPokemonEvoluido, int indicePokemonEvoluido, String msg) {
+		JogadaPokemon jPokemon = new JogadaPokemon(energia, vidaAdv, vida, msg);
+		jPokemon.configuraEvolucao(posPokemonEvoluido, indicePokemonEvoluido);
 		netGames.enviarJogada(jPokemon);
 	}
 
@@ -221,7 +217,8 @@ public class AtorJogador {
 					vida -= energia;
 					gui.update();
 					vez = false;
-					JogadaPokemon jPokemon = new JogadaPokemon(0, 0, 0, 0, 0, 0, 0, vidaAdv, vida, nome + " passou a vez para você!", 3);
+					JogadaPokemon jPokemon = new JogadaPokemon(0, vidaAdv, vida, nome + " passou a vez para você!");
+					jPokemon.configuraPassarVez();
 					netGames.enviarJogada(jPokemon);
 				}
 			} else {
@@ -273,8 +270,9 @@ public class AtorJogador {
 		
 	}
 
-	public void enviaAtaque(int indicePokemonAtacado, int indicePokemonAtacou, String msg) {
-		JogadaPokemon jPokemon = new JogadaPokemon(0, 0, indicePokemonAtacado, indicePokemonAtacou, 0, 0, energia, vidaAdv, vida, msg, 1);
+	public void enviaAtaque(int posPokemonAtacado, int posPokemonAtacou, String msg) {
+		JogadaPokemon jPokemon = new JogadaPokemon(energia, vidaAdv, vida, msg);
+		jPokemon.configuraAtaque(posPokemonAtacado, posPokemonAtacou);
 		netGames.enviarJogada(jPokemon);
 	}
 

@@ -284,53 +284,15 @@ public class InterfaceGrafica extends JFrame {
 	}
 
 	public void conectar() {
-		int resultado = jogo.conectar();
-		this.notificar(resultado);
+		jogo.conectar();
 	}
 
 	public void desconectar() {
-		int resultado = jogo.desconectar();
-		this.notificar(resultado);
+		jogo.desconectar();
 	}
 
 	public void iniciar() {
-		int resultado = jogo.iniciarPartida();
-		this.notificar(resultado);
-	}
-
-	public void notificar(int codigo) {
-		switch (codigo) {
-		case 0:
-			JOptionPane.showMessageDialog(this, "Conexão efetuada com sucesso");
-			break;
-		case 1:
-			JOptionPane.showMessageDialog(this, "Você já está conectado!");
-			break;
-		case 2:
-			JOptionPane.showMessageDialog(this, "Falha ao conectar-se!");
-			break;
-		case 3:
-			JOptionPane.showMessageDialog(this,
-					"Desconexão efetuada com sucesso!");
-			break;
-		case 4:
-		case 7:
-			JOptionPane.showMessageDialog(this, "Você não está conectado!");
-			break;
-		case 5:
-			JOptionPane.showMessageDialog(this, "Você já está conectado!");
-			break;
-		case 6:
-			JOptionPane.showMessageDialog(this,
-					"Solicitação de inicio efetuada com sucesso!");
-			break;
-		case 8:
-			JOptionPane.showMessageDialog(this, "Não é a sua vez");
-			break;
-		case 9:
-			JOptionPane.showMessageDialog(this, "Partida encerrada");
-			break;
-		}
+		jogo.iniciarPartida();
 	}
 
 	public static void main(String[] args) {

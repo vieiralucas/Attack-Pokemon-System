@@ -1,6 +1,5 @@
 package network;
 
-import gui.AtorJogador;
 import br.ufsc.inf.leobr.cliente.Jogada;
 
 public class JogadaPokemon implements Jogada {
@@ -10,13 +9,15 @@ public class JogadaPokemon implements Jogada {
 	 */
 	private static final long serialVersionUID = 3318708796487792585L;
 	
-	private int indiceInvocamento;
+	public static final int INVOCAMENTO = 0, ATAQUE = 1, EVOLUCAO = 2, PASSARVEZ = 3; 
+	
+	private int posInvocamento;
 	private int indicePokemonInvocado;
 	
-	private int indicePokemonAtacado;
-	private int indicePokemonAtacou;
+	private int posPokemonAtacado;
+	private int posPokemonAtacou;
 	
-	private int espacoPokemonEvoluido;
+	private int posPokemonEvoluido;
 	private int indicePokemonEvoluido;
 	
 	private int energiaAdversario;
@@ -26,30 +27,47 @@ public class JogadaPokemon implements Jogada {
 	private String msg;
 	private int acao;
 	
-	public JogadaPokemon(int indiceInvocamento, int indicePokemonInvocado, int indicePokemonAtacado, int indicePokemonAtacou, int espacoPokemonEvoluido, int indicePokemonEvoluido, int energiaAdversario, int vidaLocal, int vidaAdversario, String msg, int acao) {
-		if (acao == 0) { // invocamento
-			this.indiceInvocamento = indiceInvocamento;
-			this.indicePokemonInvocado = indicePokemonInvocado;			
-		} else if (acao == 1) { // ataque
-			this.indicePokemonAtacado = indicePokemonAtacado;
-			this.indicePokemonAtacou = indicePokemonAtacou;
-		} else if (acao == 2) { // evolucao
-			this.espacoPokemonEvoluido = espacoPokemonEvoluido;
-			this.indicePokemonEvoluido = indicePokemonEvoluido;
-		}
+	public JogadaPokemon(int energiaAdversario, int vidaLocal, int vidaAdversario, String msg) {
+		this.posInvocamento = 0;
+		this.indicePokemonInvocado = 0;
+		this.posPokemonAtacado = 0;
+		this.posPokemonAtacou = 0;
+		this.posPokemonEvoluido = 0;
+		this.indicePokemonEvoluido = 0;
 		this.energiaAdversario = energiaAdversario;
 		this.vidaAdversario = vidaAdversario;
 		this.vidaLocal = vidaLocal;
 		this.msg = msg;
-		this.acao = acao;
 	}
 	
-	public int getIndiceInvocamento() {
-		return indiceInvocamento;
+	public void configuraInvocamento(int posInvocamento, int indicePokemonInvocado) {
+		this.posInvocamento = posInvocamento;
+		this.indicePokemonInvocado = indicePokemonInvocado;
+		acao = JogadaPokemon.INVOCAMENTO;
 	}
 
-	public void setIndiceInvocamento(int indiceInvocamento) {
-		this.indiceInvocamento = indiceInvocamento;
+	public void configuraEvolucao(int posPokemonEvoluido, int indicePokemonEvoluido) {
+		this.posPokemonEvoluido = posPokemonEvoluido;
+		this.indicePokemonEvoluido = indicePokemonEvoluido;
+		acao = JogadaPokemon.EVOLUCAO;
+	}
+
+	public void configuraPassarVez() {
+		acao = JogadaPokemon.PASSARVEZ;
+	}
+
+	public void configuraAtaque(int posPokemonAtacado, int posPokemonAtacou) {
+		this.posPokemonAtacado = posPokemonAtacado;
+		this.posPokemonAtacou = posPokemonAtacou;
+		acao = JogadaPokemon.ATAQUE;
+	}
+
+	public int getPosInvocamento() {
+		return posInvocamento;
+	}
+
+	public void setPosInvocamento(int posInvocamento) {
+		this.posInvocamento = posInvocamento;
 	}
 
 	public int getIndicePokemonInvocado() {
@@ -60,30 +78,30 @@ public class JogadaPokemon implements Jogada {
 		this.indicePokemonInvocado = indicePokemonInvocado;
 	}
 
-	public int getIndicePokemonAtacado() {
-		return indicePokemonAtacado;
+	public int getPosPokemonAtacado() {
+		return posPokemonAtacado;
 	}
 
-	public void setIndicePokemonAtacado(int indicePokemonAtacado) {
-		this.indicePokemonAtacado = indicePokemonAtacado;
+	public void setPosPokemonAtacado(int posPokemonAtacado) {
+		this.posPokemonAtacado = posPokemonAtacado;
 	}
 
-	public int getIndicePokemonAtacou() {
-		return indicePokemonAtacou;
+	public int getPosPokemonAtacou() {
+		return posPokemonAtacou;
 	}
 
-	public void setIndicePokemonAtacou(int indicePokemonAtacou) {
-		this.indicePokemonAtacou = indicePokemonAtacou;
+	public void setPosPokemonAtacou(int posPokemonAtacou) {
+		this.posPokemonAtacou = posPokemonAtacou;
 	}
 
-	public int getEspacoPokemonEvoluido() {
-		return espacoPokemonEvoluido;
+	public int getPosPokemonEvoluido() {
+		return posPokemonEvoluido;
 	}
 
-	public void setEspacoPokemonEvoluido(int espacoPokemonEvoluido) {
-		this.espacoPokemonEvoluido = espacoPokemonEvoluido;
+	public void setPosPokemonEvoluido(int posPokemonEvoluido) {
+		this.posPokemonEvoluido = posPokemonEvoluido;
 	}
-	
+
 	public int getIndicePokemonEvoluido() {
 		return indicePokemonEvoluido;
 	}
@@ -116,6 +134,14 @@ public class JogadaPokemon implements Jogada {
 		this.vidaLocal = vidaLocal;
 	}
 
+	public String getMsg() {
+		return msg;
+	}
+
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
+
 	public int getAcao() {
 		return acao;
 	}
@@ -128,12 +154,20 @@ public class JogadaPokemon implements Jogada {
 		return serialVersionUID;
 	}
 
-	public String getMsg() {
-		return msg;
+	public static int getInvocamento() {
+		return INVOCAMENTO;
 	}
 
-	public void setMsg(String msg) {
-		this.msg = msg;
+	public static int getAtaque() {
+		return ATAQUE;
+	}
+
+	public static int getEvolucao() {
+		return EVOLUCAO;
+	}
+
+	public static int getPassarvez() {
+		return PASSARVEZ;
 	}
 
 }
