@@ -136,7 +136,7 @@ public class AtorJogador {
 		vida = jogada.getVidaLocal();
 		vidaAdv = jogada.getVidaAdversario();
 		gui.showMessage(jogada.getMsg());
-		gui.drawRemoto(jogada);
+		gui.update();
 		if (jogada.getAcao() == 3) { // passar vez
 			vez = true;
 			energia = 5;

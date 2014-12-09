@@ -402,22 +402,4 @@ public class InterfaceGrafica extends JFrame {
 		vidaJogador2.setText("VIDA: " + jogo.getVidaRemota());
 	}
 
-	public void drawRemoto(JogadaPokemon jogada) {
-		if (jogada.getAcao() == 0) {
-			espacosJogador2[jogada.getIndiceInvocamento()].setIcon(jogo.baralho.find(jogada.getIndicePokemonInvocado()).getImage());
-		} else if (jogada.getAcao() == 1){
-			if (jogo.arena.getEspacosRemotos()[jogada.getIndicePokemonAtacou()].getPokemon().atacar(jogo.arena.getEspacosLocal()[jogada.getIndicePokemonAtacado()].getPokemon())) {
-				espacosJogador1[jogada.getIndicePokemonAtacado()].setIcon(espacoVazio);
-			} else {
-				espacosJogador2[jogada.getIndicePokemonAtacou()].setIcon(espacoVazio);
-			}
-		} else if(jogada.getAcao() == 2) {
-			espacosJogador2[jogada.getEspacoPokemonEvoluido()].setIcon(jogo.baralho.find(jogada.getIndicePokemonEvoluido()).getEvolucao().getImage());
-		}
-		
-		vidaJogador1.setText("VIDA " + jogada.getVidaLocal());
-		vidaJogador2.setText("VIDA " + jogada.getVidaAdversario());
-		energiaJogador2.setText("ENERGIA: " + jogada.getEnergiaAdversario() + "/5");
-	}
-
 }
