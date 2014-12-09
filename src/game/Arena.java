@@ -90,10 +90,10 @@ public class Arena {
 		Pokemon atacado = espacosLocal[posPokemonAtacado].getPokemon();
 		Pokemon atacou = espacosRemotos[posPokemonAtacou].getPokemon();
 		if (atacou.atacar(atacado)) {
-			espacosRemotos[posPokemonAtacado].setPokemon(null);
+			espacosLocal[posPokemonAtacado].setPokemon(null);
 			return atacado.getVida();
 		} else {
-			espacosLocal[posPokemonAtacou].setPokemon(null);
+			espacosRemotos[posPokemonAtacou].setPokemon(null);
 			return -atacou.getVida();
 		}
 	}
