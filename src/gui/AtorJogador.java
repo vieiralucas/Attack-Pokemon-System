@@ -71,11 +71,14 @@ public class AtorJogador {
 		if (posicao == 1) {
 			gui.showMessage("É a sua vez!");
 			vez = true;
-			mao[0] = baralho.draw();
+			drawPokemon();
 		} else {
 			gui.showMessage("É a vez do jogador adversário!");
 			vez = false;
 		}
+		drawPokemon();
+		drawPokemon();
+		drawPokemon();
 		gui.update();
 		arena.setConectado(true);
 		arena.setEmAndamento(true);
@@ -122,9 +125,10 @@ public class AtorJogador {
 		JogadaPokemon jogada = (JogadaPokemon) lance;
 		if (jogada.getAcao() == JogadaPokemon.INVOCAMENTO) {
 			arena.invocaPokemonRemoto(jogada.getPosInvocamento(), jogada.getIndicePokemonInvocado());
-		}
-		if (jogada.getAcao() == JogadaPokemon.ATAQUE) {
+		} else if (jogada.getAcao() == JogadaPokemon.ATAQUE) {
 			arena.batalhaRemota(jogada.getPosPokemonAtacado(), jogada.getPosPokemonAtacou());
+		} else if (jogada.getAcao() == JogadaPokemon.EVOLUCAO) {
+			arena.evoluirRemoto(jogada.getPosPokemonEvoluido());
 		}
 		energiaAdv = jogada.getEnergiaAdversario();
 		vida = jogada.getVidaLocal();
@@ -134,12 +138,12 @@ public class AtorJogador {
 		if (jogada.getAcao() == 3) { // passar vez
 			vez = true;
 			energia = 5;
-			drawDeck();
+			drawPokemon();
 			gui.update();
 		}
 	}
 
-	public void drawDeck() {
+	public void drawPokemon() {
 		for(int i = 0; i < mao.length; i++) {
 			if(mao[i] == null) {
 				mao[i] = baralho.draw();
@@ -184,7 +188,7 @@ public class AtorJogador {
 						int confirm = JOptionPane.showConfirmDialog(gui, "Tem certeza que deseja evoluir seu " + pkmn.getNome() + "? Custo: " + pkmn.getEvolucao().getCusto());
 						if (confirm == JOptionPane.YES_OPTION) {
 							energia -= pkmn.getEvolucao().getCusto();
-							arena.getEspacosLocal()[i].setPokemon(pkmn.getEvolucao());
+							arena.evoluirLocal(i);
 							gui.update();
 							gui.showMessage("Seu " + pkmn.getNome() + " está evoluindo para um " + pkmn.getEvolucao().getNome());
 							enviaEvolucao(i, pkmn.getIndice(), nome + " evoluiu seu " + pkmn.getNome() + " para um " + pkmn.getEvolucao().getNome());
@@ -306,7 +310,5 @@ public class AtorJogador {
 	public int getVidaRemota() {
 		return vidaAdv;
 	}
-	
-	
 
 }

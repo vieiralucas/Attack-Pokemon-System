@@ -97,4 +97,12 @@ public class Arena {
 			return -atacou.getVida();
 		}
 	}
+
+	public void evoluirLocal(int i) {
+		espacosLocal[i].setPokemon(espacosLocal[i].getPokemon().getEvolucao());
+	}
+
+	public void evoluirRemoto(int posPokemonEvoluido) {
+		espacosRemotos[posPokemonEvoluido].setPokemon(espacosRemotos[posPokemonEvoluido].getPokemon().getEvolucao());
+	}
 }
