@@ -12,6 +12,8 @@ public class Espaco {
 	}
 	
 	public void setAtacou(boolean atacou) {
-		this.pokemon.setAtacou(atacou);
+		if (pokemon != null) {
+			pokemon.setAtacou(atacou);			
+		}
 	}
 }

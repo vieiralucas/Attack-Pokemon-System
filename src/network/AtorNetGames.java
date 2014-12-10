@@ -3,7 +3,6 @@ package network;
 import javax.swing.JOptionPane;
 
 import gui.AtorJogador;
-import gui.InterfaceGrafica;
 import br.ufsc.inf.leobr.cliente.Jogada;
 import br.ufsc.inf.leobr.cliente.OuvidorProxy;
 import br.ufsc.inf.leobr.cliente.Proxy;

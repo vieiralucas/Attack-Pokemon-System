@@ -62,8 +62,8 @@ public class AtorJogador {
 		String nomeAdversario = netGames.getNomeAdversario(nome);
 		gui.setPlayersName(nome, nomeAdversario);
 		gui.showMessage("O jogo vai começar!");
-		energia = energiaAdv = 5;
-		vida = vidaAdv = 50;
+		energia = energiaAdv = 50;
+		vida = vidaAdv = 5;
 		mao = new Pokemon[6];
 		pkmnAtacando = null;
 		arena.init();
@@ -140,9 +140,10 @@ public class AtorJogador {
 			drawPokemon();
 		}
 		gui.update();
-		checkEnd();
 		if(jogada.getAcao() == JogadaPokemon.FIM) {
 			netGames.finalizarPartida();
+		} else {
+			checkEnd();			
 		}
 	}
 
@@ -291,6 +292,7 @@ public class AtorJogador {
 					arena.getEspacosLocal()[pkmnAtacandoPos].setPokemon(null);
 					enviaAtaque(i, pkmnAtacandoPos, "Seu adversário atacou seu " + alvo.getNome() + " e foi derrotado.");
 				}
+				
 				gui.update();
 			}
 		} else {
