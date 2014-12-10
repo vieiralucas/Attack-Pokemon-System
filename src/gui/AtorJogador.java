@@ -277,10 +277,11 @@ public class AtorJogador {
 		if (alvo == null || pkmnAtacando == null) {
 			return;
 		}
-		if (!pkmnAtacando.isAtacou()) {
+		if (!pkmnAtacando.isAtacou() && energia >= 2) {
 			int confirm = JOptionPane.showConfirmDialog(gui, "Deseja atacar " + alvo.getNome() + " com seu " + pkmnAtacando.getNome() + "?");
 			if (confirm == JOptionPane.YES_OPTION) {
 				arena.setAtacou(i, true);
+				energia -= 2;
 				if (pkmnAtacando.atacar(alvo)) {
 					vidaAdv -= alvo.getVida();
 					gui.showMessage("Seu pokémon venceu a batalha! Você causou " + alvo.getVida() + " de dano no seu adversário.");
@@ -295,6 +296,8 @@ public class AtorJogador {
 				
 				gui.update();
 			}
+		} else if(energia < 2) {
+			gui.showMessage("É necessário ter 2 energias para poder atacar.");
 		} else {
 			gui.showMessage("Este pokémon já atacou nessa rodada.");
 		}

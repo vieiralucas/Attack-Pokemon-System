@@ -55,7 +55,7 @@ public class Pokemon {
 		} else if(tipo == ELETRICO) {
 			switch (alvo.getTipo()) {
 			case PLANTA:
-				return ataque >= alvo.getAtaque() * 2;
+				return ataque >= alvo.getAtaque();
 			case AGUA:
 				return ataque * 2 >= alvo.getAtaque();
 			case ELETRICO:
@@ -66,7 +66,7 @@ public class Pokemon {
 		} else {
 			switch (alvo.getTipo()) {
 			case PLANTA:
-				return ataque >= alvo.getAtaque();
+				return ataque >= alvo.getAtaque() ;
 			case AGUA:
 				return ataque >= alvo.getAtaque();
 			case ELETRICO:
