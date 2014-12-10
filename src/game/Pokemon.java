@@ -14,6 +14,7 @@ public class Pokemon {
 	protected int custo;
 	protected int tipo;
 	protected Icon image;
+	protected boolean atacou;
 	
 	public Pokemon(int indice, String nome, Pokemon evolucao, int ataque, int vida, int custo, int tipo, Icon image) {
 		this.indice = indice;
@@ -24,6 +25,56 @@ public class Pokemon {
 		this.custo = custo;
 		this.tipo = tipo;
 		this.image = image;
+		this.atacou = false;
+	}
+	
+	// retorna true se o pokemon alvo perder
+	public boolean atacar(Pokemon alvo) {
+		if (tipo == FOGO) {
+			switch (alvo.getTipo()) {
+			case PLANTA:
+				return ataque * 2 >= alvo.getAtaque();
+			case AGUA:
+				return ataque >= alvo.getAtaque() * 2;
+			case ELETRICO:
+				return ataque >= alvo.getAtaque();
+			default:
+				return ataque >= alvo.getAtaque();
+			}
+		} else if(tipo == PLANTA) {
+			switch (alvo.getTipo()) {
+			case PLANTA:
+				return ataque >= alvo.getAtaque();
+			case AGUA:
+				return ataque >= alvo.getAtaque();
+			case ELETRICO:
+				return ataque * 2 >= alvo.getAtaque();
+			default:
+				return ataque >= alvo.getAtaque() * 2;
+			}
+		} else if(tipo == ELETRICO) {
+			switch (alvo.getTipo()) {
+			case PLANTA:
+				return ataque >= alvo.getAtaque() * 2;
+			case AGUA:
+				return ataque * 2 >= alvo.getAtaque();
+			case ELETRICO:
+				return ataque >= alvo.getAtaque();
+			default:
+				return ataque >= alvo.getAtaque() * 2;
+			}
+		} else {
+			switch (alvo.getTipo()) {
+			case PLANTA:
+				return ataque >= alvo.getAtaque();
+			case AGUA:
+				return ataque >= alvo.getAtaque();
+			case ELETRICO:
+				return ataque >= alvo.getAtaque() * 2;
+			default:
+				return ataque * 2 >= alvo.getAtaque();
+			}
+		}
 	}
 	
 	public int getIndice() {
@@ -74,55 +125,11 @@ public class Pokemon {
 	public void setImage(Icon image) {
 		this.image = image;
 	}
-	
-	// retorna true se o pokemon alvo perder
-	public boolean atacar(Pokemon alvo) {
-		if (tipo == FOGO) {
-			switch (alvo.getTipo()) {
-			case PLANTA:
-				return ataque * 2 > alvo.getAtaque();
-			case AGUA:
-				return ataque > alvo.getAtaque() * 2;
-			case ELETRICO:
-				return ataque > alvo.getAtaque();
-			default:
-				return ataque > alvo.getAtaque();
-			}
-		} else if(tipo == PLANTA) {
-			switch (alvo.getTipo()) {
-			case PLANTA:
-				return ataque > alvo.getAtaque();
-			case AGUA:
-				return ataque > alvo.getAtaque();
-			case ELETRICO:
-				return ataque * 2 > alvo.getAtaque();
-			default:
-				return ataque > alvo.getAtaque() * 2;
-			}
-		} else if(tipo == ELETRICO) {
-			switch (alvo.getTipo()) {
-			case PLANTA:
-				return ataque > alvo.getAtaque() * 2;
-			case AGUA:
-				return ataque * 2 > alvo.getAtaque();
-			case ELETRICO:
-				return ataque > alvo.getAtaque();
-			default:
-				return ataque > alvo.getAtaque() * 2;
-			}
-		} else {
-			switch (alvo.getTipo()) {
-			case PLANTA:
-				return ataque > alvo.getAtaque();
-			case AGUA:
-				return ataque > alvo.getAtaque();
-			case ELETRICO:
-				return ataque > alvo.getAtaque() * 2;
-			default:
-				return ataque * 2 > alvo.getAtaque();
-			}
-		}
+	public boolean isAtacou() {
+		return atacou;
 	}
-	
+	public void setAtacou(boolean atacou) {
+		this.atacou = atacou;
+	}
 	
 }

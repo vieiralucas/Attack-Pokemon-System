@@ -60,7 +60,7 @@ public class Arena {
 
 	public boolean hasPokemonAdversario() {
 		for (int i = 0; i < espacosRemotos.length; i++) {
-			if(espacosLocal[i].getPokemon() != null) {
+			if(espacosRemotos[i].getPokemon() != null) {
 				return true;
 			}
 		}
@@ -104,5 +104,15 @@ public class Arena {
 
 	public void evoluirRemoto(int posPokemonEvoluido) {
 		espacosRemotos[posPokemonEvoluido].setPokemon(espacosRemotos[posPokemonEvoluido].getPokemon().getEvolucao());
+	}
+	
+	public void setAtacou(int i, boolean atacou) {
+		espacosLocal[i].setAtacou(atacou);
+	}
+
+	public void resetPokemonsQueAtacaram() {
+		for (Espaco espacoLocal : espacosLocal) {
+			espacoLocal.setAtacou(false);			
+		}
 	}
 }

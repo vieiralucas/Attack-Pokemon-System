@@ -10,4 +10,8 @@ public class Espaco {
 	public void setPokemon(Pokemon pokemon) {
 		this.pokemon = pokemon;
 	}
+	
+	public void setAtacou(boolean atacou) {
+		this.pokemon.setAtacou(atacou);
+	}
 }

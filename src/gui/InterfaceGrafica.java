@@ -1,8 +1,5 @@
 package gui;
 
-import game.Espaco;
-import game.Pokemon;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -295,10 +292,6 @@ public class InterfaceGrafica extends JFrame {
 		jogo.iniciarPartida();
 	}
 
-	public static void main(String[] args) {
-		new InterfaceGrafica();
-	}
-
 	public String obterNomeJogador() {
 		String nome = ("jogador");
 		nome = JOptionPane.showInputDialog(this, ("Insira o nome do jogador"));
@@ -362,6 +355,10 @@ public class InterfaceGrafica extends JFrame {
 		
 		energiaJogador2.setText("ENERGIA: " + jogo.getEnergiaRemota() + "/5");
 		vidaJogador2.setText("VIDA: " + jogo.getVidaRemota());
+	}
+	
+	public static void main(String[] args) {
+		new InterfaceGrafica();
 	}
 
 }

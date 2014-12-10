@@ -134,13 +134,13 @@ public class AtorJogador {
 		vida = jogada.getVidaLocal();
 		vidaAdv = jogada.getVidaAdversario();
 		gui.showMessage(jogada.getMsg());
-		gui.update();
-		if (jogada.getAcao() == 3) { // passar vez
+		if (jogada.getAcao() == JogadaPokemon.PASSARVEZ) {
 			vez = true;
 			energia = 5;
 			drawPokemon();
-			gui.update();
 		}
+		gui.update();
+		checkEnd();
 	}
 
 	public void drawPokemon() {
@@ -241,9 +241,18 @@ public class AtorJogador {
 				if (arena.hasPokemonAdversario()) {
 					gui.showMessage("Escolha um pokémon adversário para atacar.");
 				} else {
-					int confirm = JOptionPane.showConfirmDialog(gui, "Deseja atacar seu adversário diretamente nos pontos de vida? Dano: " + pkmnAtacando.getAtaque() + ".");
-					if (confirm == JOptionPane.YES_OPTION) {
-						// atacar pontos de vida
+					if (!pkmnAtacando.isAtacou()) {
+						int confirm = JOptionPane.showConfirmDialog(gui, "Deseja atacar seu adversário diretamente nos pontos de vida? Dano: " + pkmnAtacando.getAtaque() + ".");
+						if (confirm == JOptionPane.YES_OPTION) {
+							vidaAdv -= pkmnAtacando.getAtaque();
+							energia -= 2;
+							enviaAtaqueVida(vidaAdv, "Seu adversário atacou seus pontos de vida com um " + pkmnAtacando.getNome() + ". Dano: " + pkmnAtacando.getAtaque());
+							gui.update();
+							arena.setAtacou(i, true);
+						}						
+					} else {
+						pkmnAtacando = null;
+						gui.showMessage("Este pokémon já atacou nessa rodada.");
 					}
 				}
 			} else {
@@ -252,23 +261,37 @@ public class AtorJogador {
 		}
 	}
 
+	private void enviaAtaqueVida(int vidaAdv, String msg) {
+		JogadaPokemon jPokemon = new JogadaPokemon(energia, vidaAdv, vida, msg);
+		jPokemon.setAcao(JogadaPokemon.ATAQUEVIDA);
+		netGames.enviarJogada(jPokemon);
+	}
+
 	public void clickPkmnAdv(int i) {
+		Pokemon alvo = arena.getEspacosRemotos()[i].getPokemon();
+		if (alvo == null) {
+			return;
+		}
 		if (pkmnAtacando != null) {
-			Pokemon alvo = arena.getEspacosRemotos()[i].getPokemon();
-			int confirm = JOptionPane.showConfirmDialog(gui, "Deseja atacar " + alvo.getNome() + " com seu " + pkmnAtacando.getNome() + "?");
-			if (confirm == JOptionPane.YES_OPTION) {
-				if (pkmnAtacando.atacar(alvo)) {
-					vidaAdv -= alvo.getVida();
-					gui.showMessage("Seu pokémon venceu a batalha! Você causou " + alvo.getVida() + " de dano no seu adversário.");
-					arena.getEspacosRemotos()[i].setPokemon(null);
-					enviaAtaque(i, pkmnAtacandoPos, "Seu adversário atacou seu " + alvo.getNome() + " e o derrotou.");
-				} else {
-					vida -= pkmnAtacando.getVida();
-					gui.showMessage("Seu pokémon perdeu a batalha! Você perdeu " + pkmnAtacando.getVida() + " pontos de vida.");
-					arena.getEspacosLocal()[pkmnAtacandoPos].setPokemon(null);
-					enviaAtaque(i, pkmnAtacandoPos, "Seu adversário atacou seu " + alvo.getNome() + " e foi derrotado.");
+			if (!pkmnAtacando.isAtacou()) {
+				int confirm = JOptionPane.showConfirmDialog(gui, "Deseja atacar " + alvo.getNome() + " com seu " + pkmnAtacando.getNome() + "?");
+				if (confirm == JOptionPane.YES_OPTION) {
+					arena.setAtacou(i, true);
+					if (pkmnAtacando.atacar(alvo)) {
+						vidaAdv -= alvo.getVida();
+						gui.showMessage("Seu pokémon venceu a batalha! Você causou " + alvo.getVida() + " de dano no seu adversário.");
+						arena.getEspacosRemotos()[i].setPokemon(null);
+						enviaAtaque(i, pkmnAtacandoPos, "Seu adversário atacou seu " + alvo.getNome() + " e o derrotou.");
+					} else {
+						vida -= pkmnAtacando.getVida();
+						gui.showMessage("Seu pokémon perdeu a batalha! Você perdeu " + pkmnAtacando.getVida() + " pontos de vida.");
+						arena.getEspacosLocal()[pkmnAtacandoPos].setPokemon(null);
+						enviaAtaque(i, pkmnAtacandoPos, "Seu adversário atacou seu " + alvo.getNome() + " e foi derrotado.");
+					}
+					gui.update();
 				}
-				gui.update();
+			} else {
+				gui.showMessage("Este pokémon já atacou nessa rodada.");
 			}
 		}
 		
@@ -278,6 +301,14 @@ public class AtorJogador {
 		JogadaPokemon jPokemon = new JogadaPokemon(energia, vidaAdv, vida, msg);
 		jPokemon.configuraAtaque(posPokemonAtacado, posPokemonAtacou);
 		netGames.enviarJogada(jPokemon);
+	}
+	
+	public void checkEnd() {
+		if (vida <= 0) {
+			// derrota local
+		} else if (vida <= 0) {
+			// derrota remota
+		}
 	}
 
 	public Icon getIconMaoLocal(int i) {
