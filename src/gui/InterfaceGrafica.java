@@ -14,8 +14,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import network.JogadaPokemon;
-
 @SuppressWarnings("serial")
 public class InterfaceGrafica extends JFrame {
 

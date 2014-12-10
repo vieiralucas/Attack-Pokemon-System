@@ -3,6 +3,7 @@ package network;
 import javax.swing.JOptionPane;
 
 import gui.AtorJogador;
+import gui.InterfaceGrafica;
 import br.ufsc.inf.leobr.cliente.Jogada;
 import br.ufsc.inf.leobr.cliente.OuvidorProxy;
 import br.ufsc.inf.leobr.cliente.Proxy;
@@ -71,8 +72,16 @@ public class AtorNetGames implements OuvidorProxy {
 
 	@Override
 	public void tratarConexaoPerdida() {
-		// TODO Auto-generated method stub
-
+		JOptionPane.showMessageDialog(atorJogador.getFrame(), "Sua conexão foi perdida.");
+		try {
+			proxy.finalizarPartida();
+		} catch (NaoConectadoException e) {
+			JOptionPane.showMessageDialog(atorJogador.getFrame(), e.getMessage());
+			e.printStackTrace();
+		} catch (NaoJogandoException e) {
+			JOptionPane.showMessageDialog(atorJogador.getFrame(), e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -121,6 +130,20 @@ public class AtorNetGames implements OuvidorProxy {
 			return aux2;
 		} else {
 			return aux1;
+		}
+	}
+	
+	public void finalizarPartida() {
+		try {
+			proxy.finalizarPartida();
+		} catch (NaoConectadoException e) {
+			JOptionPane.showMessageDialog(atorJogador.getFrame(),
+					e.getMessage());
+			e.printStackTrace();
+		} catch (NaoJogandoException e) {
+			JOptionPane.showMessageDialog(atorJogador.getFrame(),
+					e.getMessage());
+			e.printStackTrace();
 		}
 	}
 }

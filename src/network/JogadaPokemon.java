@@ -9,7 +9,7 @@ public class JogadaPokemon implements Jogada {
 	 */
 	private static final long serialVersionUID = 3318708796487792585L;
 	
-	public static final int INVOCAMENTO = 0, ATAQUE = 1, EVOLUCAO = 2, PASSARVEZ = 3, ATAQUEVIDA = 4; 
+	public static final int INVOCAMENTO = 0, ATAQUE = 1, EVOLUCAO = 2, PASSARVEZ = 3, ATAQUEVIDA = 4, FIM = 5; 
 	
 	private int posInvocamento;
 	private int indicePokemonInvocado;
