@@ -62,8 +62,8 @@ public class AtorJogador {
 		String nomeAdversario = netGames.getNomeAdversario(nome);
 		gui.setPlayersName(nome, nomeAdversario);
 		gui.showMessage("O jogo vai começar!");
-		energia = energiaAdv = 50;
-		vida = vidaAdv = 5;
+		energia = energiaAdv = 5;
+		vida = vidaAdv = 50;
 		mao = new Pokemon[6];
 		pkmnAtacando = null;
 		arena.init();
