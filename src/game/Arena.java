@@ -111,8 +111,8 @@ public class Arena {
 	}
 
 	public void resetPokemonsQueAtacaram() {
-		for (Espaco espacoLocal : espacosLocal) {
-			espacoLocal.setAtacou(false);			
+		for (int i = 0; i < espacosLocal.length; i++) {
+			espacosLocal[i].setAtacou(false);
 		}
 	}
 }
