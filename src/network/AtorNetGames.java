@@ -72,15 +72,6 @@ public class AtorNetGames implements OuvidorProxy {
 	@Override
 	public void tratarConexaoPerdida() {
 		JOptionPane.showMessageDialog(atorJogador.getFrame(), "Sua conexão foi perdida.");
-		try {
-			proxy.finalizarPartida();
-		} catch (NaoConectadoException e) {
-			JOptionPane.showMessageDialog(atorJogador.getFrame(), e.getMessage());
-			e.printStackTrace();
-		} catch (NaoJogandoException e) {
-			JOptionPane.showMessageDialog(atorJogador.getFrame(), e.getMessage());
-			e.printStackTrace();
-		}
 	}
 
 	@Override
