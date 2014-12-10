@@ -143,7 +143,7 @@ public class AtorJogador {
 		if(jogada.getAcao() == JogadaPokemon.FIM) {
 			netGames.finalizarPartida();
 		} else {
-			checkEnd();			
+			checarFim();			
 		}
 	}
 
@@ -156,23 +156,25 @@ public class AtorJogador {
 		}
 	}
 
-	public void maoClick(int i) {
-		if (mao[i] != null && vez) {
-			if (energia - mao[i].getCusto() >= 0) {
-				int confirm = JOptionPane.showConfirmDialog(gui, "Tem certeza que deseja invocar " + mao[i].getNome() + "?");
-				if (confirm == JOptionPane.YES_OPTION) {
-					int posInvocamento = arena.invocaPokemonLocal(mao[i]); 
-					if (posInvocamento != -1) {
-						energia -= mao[i].getCusto();
-						enviaInvocamento(posInvocamento, mao[i].getIndice(), "O adversário invocou um " + mao[i].getNome());
-						mao[i] = null;
-						gui.update();
+	public void invocar(int i) {
+		if (vez) {
+			if (mao[i] != null) {
+				if (energia - mao[i].getCusto() >= 0) {
+					int confirm = JOptionPane.showConfirmDialog(gui, "Tem certeza que deseja invocar " + mao[i].getNome() + "?");
+					if (confirm == JOptionPane.YES_OPTION) {
+						int posInvocamento = arena.invocaPokemonLocal(mao[i]); 
+						if (posInvocamento != -1) {
+							energia -= mao[i].getCusto();
+							enviaInvocamento(posInvocamento, mao[i].getIndice(), "O adversário invocou um " + mao[i].getNome());
+							mao[i] = null;
+							gui.update();
+						}
 					}
+				} else {
+					gui.showMessage("Você não possui energia para invocar " + mao[i].getNome());
 				}
-			} else {
-				gui.showMessage("Você não possui energia para invocar " + mao[i].getNome());
 			}
-		} else if(!vez) {
+		} else {
 			gui.showMessage("Aguarde a sua vez.");
 		}
 	}
@@ -310,13 +312,13 @@ public class AtorJogador {
 		netGames.enviarJogada(jPokemon);
 	}
 	
-	public void checkEnd() {
-		if (vida <= 0) {
+	public void checarFim() {
+		if (vida < 1) {
 			gui.showMessage("Você foi derrotado!");
 			JogadaPokemon jPokemon = new JogadaPokemon(energiaAdv, vidaAdv, vida, "Parabéns! Você venceu!");
 			jPokemon.setAcao(JogadaPokemon.FIM);
 			netGames.enviarJogada(jPokemon);
-		} else if (vidaAdv <= 0) {
+		} else if (vidaAdv < 1) {
 			gui.showMessage("Parabéns! Você venceu!");
 			JogadaPokemon jPokemon = new JogadaPokemon(energiaAdv, vidaAdv, vida, "Você foi derrotado!");
 			jPokemon.setAcao(JogadaPokemon.FIM);

@@ -150,24 +150,4 @@ public class JogadaPokemon implements Jogada {
 		this.acao = acao;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
-	public static int getInvocamento() {
-		return INVOCAMENTO;
-	}
-
-	public static int getAtaque() {
-		return ATAQUE;
-	}
-
-	public static int getEvolucao() {
-		return EVOLUCAO;
-	}
-
-	public static int getPassarvez() {
-		return PASSARVEZ;
-	}
-
 }

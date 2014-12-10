@@ -122,32 +122,32 @@ public class InterfaceGrafica extends JFrame {
 		}
 		maoJogador1[0].addMouseListener(new MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent e) {
-				jogo.maoClick(0); 
+				jogo.invocar(0); 
 			}
 		});
 		maoJogador1[1].addMouseListener(new MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent e) {
-				jogo.maoClick(1); 
+				jogo.invocar(1); 
 			}
 		});
 		maoJogador1[2].addMouseListener(new MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent e) {
-				jogo.maoClick(2); 
+				jogo.invocar(2); 
 			}
 		});
 		maoJogador1[3].addMouseListener(new MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent e) {
-				jogo.maoClick(3); 
+				jogo.invocar(3); 
 			}
 		});
 		maoJogador1[4].addMouseListener(new MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent e) {
-				jogo.maoClick(4); 
+				jogo.invocar(4); 
 			}
 		});
 		maoJogador1[5].addMouseListener(new MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent e) {
-				jogo.maoClick(5); 
+				jogo.invocar(5); 
 			}
 		});
 		espacosJogador1[0].addMouseListener(new MouseAdapter() {
